@@ -62,46 +62,7 @@ public class TakePicture : MonoBehaviour
 
 	}
 
-    /*this takes a screenshot, saves it to file, and reads the file to the variable imageByteArray
-	 * I tried other methods of taking a picture like using Vuforia's Image class and also creating another
-	 * Unity webcamtexture, none of which worked on both mobile and in the editor so this is what I landed on
-	 */
-
-   /* public IEnumerator TakePhoto()
-    {
-        string filePath;
-
-        //on mobile platforms persistentDataPath is already prepended to file name when using CaptureScreenshot()
-        if (Application.isMobilePlatform)
-        {
-
-            filePath = Application.persistentDataPath + "/image.png";
-            Application.CaptureScreenshot("/image.png");
-            //must delay here so picture has time to save unfortunatly
-            yield return new WaitForSeconds(1.5f);
-            //Encode to a PNG
-            imageByteArray = File.ReadAllBytes(filePath);
-
-        }
-        else
-        {
-
-            filePath = Application.dataPath + "/StreamingAssets/" + "image.png";
-            Application.CaptureScreenshot(filePath);
-            //must delay here so picture has time to save unfortunatly
-            yield return new WaitForSeconds(1.5f);
-            //Encode to a PNG
-            imageByteArray = File.ReadAllBytes(filePath);
-        }
-
-        print("photo done!!");
-        StartCoroutine("UploadImage");
-
-        buttonObject.SetActive(false);
-        scanningObject.SetActive(true);
-
-    }
-    */
+  
     //uploads the image to Cloudinary (you must first create an unsigned upload preset for this to work) and gets the image url
     public IEnumerator UploadImage(){
 
@@ -122,14 +83,7 @@ public class TakePicture : MonoBehaviour
 		imageURl = www.text.Split('"', '"')[41];
 		print ("IMAGE URL: " + imageURl);
 
-		/*I got burned out trying to figure out how to delete an image after we use it
-		 * so if someone else could figure it out that would be great, you will probably
-		 * need this image identifier and timestamp.
-		 * imageIdentifier = www.text.Split('"', '"')[3]; 
-		 * timeStamp = www.text.Split('"', '"')[25]; 
-		 * print ("IMAGE Identifier: " + imageIdentifier);
-		 * print ("TIMESTAMP: " + timeStamp);
-		*/
+		//need to figure out a way to delete image
 
 		StartCoroutine ("reverseImageSearch");
 
