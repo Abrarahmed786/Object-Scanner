@@ -128,30 +128,23 @@ public class TakePicture : MonoBehaviour
 		print (www.text);
 
 		//set default lines for the first result on google
-		if (parsedData.Length > 42) {
-			string line1 = parsedData [43];
-			string line2 = parsedData [47];
+		if (parsedData.Length > 0) {
+			
 
 			//lets check for wikipedia results and if there are any we will overwrite our default values
-			for (int i = 0; i < parsedData.Length; i++) {
+			for (int i = 0; i < parsedData.Length-1; i++) {
 
 				if (parsedData [i].Contains ("Wikipedia")) {
 					line1 = parsedData [i];
-					line2 = parsedData [i + 4];
+					line2 = parsedData [i + 1];
 					break;
 				}
 			}
 
-			//remove first unwanted characters from string
-			line1 = line1.Remove(0,13);
-			line2 = line2.Remove (0, 15);
-			//remove last unwanted characters from string
-			line1 = line1.Remove (line1.Length - 2);
-			line2 = line2.Remove (line2.Length - 2);
-
-			//remove new line characters from string we will add our own later.
-			if (line2.Contains("\n")){
-				line2.Replace("\n"," ");
+	
+			if (line2.Contains("\n") || line1.Contains("\n")){
+				line2.Replace("\n","");
+				line1.Replace("\n","")
 			}
 
 			CreateVisibleText (wordsToSearch, line1, line2);
