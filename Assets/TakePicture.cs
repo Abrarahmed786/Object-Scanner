@@ -62,46 +62,7 @@ public class TakePicture : MonoBehaviour
 
 	}
 
-    /*this takes a screenshot, saves it to file, and reads the file to the variable imageByteArray
-	 * I tried other methods of taking a picture like using Vuforia's Image class and also creating another
-	 * Unity webcamtexture, none of which worked on both mobile and in the editor so this is what I landed on
-	 */
-
-   /* public IEnumerator TakePhoto()
-    {
-        string filePath;
-
-        //on mobile platforms persistentDataPath is already prepended to file name when using CaptureScreenshot()
-        if (Application.isMobilePlatform)
-        {
-
-            filePath = Application.persistentDataPath + "/image.png";
-            Application.CaptureScreenshot("/image.png");
-            //must delay here so picture has time to save unfortunatly
-            yield return new WaitForSeconds(1.5f);
-            //Encode to a PNG
-            imageByteArray = File.ReadAllBytes(filePath);
-
-        }
-        else
-        {
-
-            filePath = Application.dataPath + "/StreamingAssets/" + "image.png";
-            Application.CaptureScreenshot(filePath);
-            //must delay here so picture has time to save unfortunatly
-            yield return new WaitForSeconds(1.5f);
-            //Encode to a PNG
-            imageByteArray = File.ReadAllBytes(filePath);
-        }
-
-        print("photo done!!");
-        StartCoroutine("UploadImage");
-
-        buttonObject.SetActive(false);
-        scanningObject.SetActive(true);
-
-    }
-    */
+  
     //uploads the image to Cloudinary (you must first create an unsigned upload preset for this to work) and gets the image url
     public IEnumerator UploadImage(){
 
@@ -122,14 +83,7 @@ public class TakePicture : MonoBehaviour
 		imageURl = www.text.Split('"', '"')[41];
 		print ("IMAGE URL: " + imageURl);
 
-		/*I got burned out trying to figure out how to delete an image after we use it
-		 * so if someone else could figure it out that would be great, you will probably
-		 * need this image identifier and timestamp.
-		 * imageIdentifier = www.text.Split('"', '"')[3]; 
-		 * timeStamp = www.text.Split('"', '"')[25]; 
-		 * print ("IMAGE Identifier: " + imageIdentifier);
-		 * print ("TIMESTAMP: " + timeStamp);
-		*/
+		//need to figure out a way to delete image
 
 		StartCoroutine ("reverseImageSearch");
 
@@ -174,30 +128,23 @@ public class TakePicture : MonoBehaviour
 		print (www.text);
 
 		//set default lines for the first result on google
-		if (parsedData.Length > 42) {
-			string line1 = parsedData [43];
-			string line2 = parsedData [47];
+		if (parsedData.Length > 0) {
+			
 
 			//lets check for wikipedia results and if there are any we will overwrite our default values
-			for (int i = 0; i < parsedData.Length; i++) {
+			for (int i = 0; i < parsedData.Length-1; i++) {
 
 				if (parsedData [i].Contains ("Wikipedia")) {
 					line1 = parsedData [i];
-					line2 = parsedData [i + 4];
+					line2 = parsedData [i + 1];
 					break;
 				}
 			}
 
-			//remove first unwanted characters from string
-			line1 = line1.Remove(0,13);
-			line2 = line2.Remove (0, 15);
-			//remove last unwanted characters from string
-			line1 = line1.Remove (line1.Length - 2);
-			line2 = line2.Remove (line2.Length - 2);
-
-			//remove new line characters from string we will add our own later.
-			if (line2.Contains("\n")){
-				line2.Replace("\n"," ");
+	
+			if (line2.Contains("\n") || line1.Contains("\n")){
+				line2.Replace("\n","");
+				line1.Replace("\n","")
 			}
 
 			CreateVisibleText (wordsToSearch, line1, line2);
